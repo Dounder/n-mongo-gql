@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: mongo:6
+    restart: always
+    ports:
+      - '27017:27017'
+    env_file:
+      - .env
+    command: mongod --auth
+    volumes:
+      - ./mongo:/data/db
+    container_name: mongo
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: nest-mongo-gql:0.1.0
+    container_name: nest_app
+    restart: always
+    ports:
+      - '${PORT}:${PORT}'
+    env_file:
+      - .env
+    stdin_open: true
