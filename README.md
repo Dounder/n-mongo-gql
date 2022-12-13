@@ -97,12 +97,14 @@ services:
 
 ```bash
 # where "db" is the service name
-MONGO_URI=mongodb://<user>:<password>@db
+MONGO_URI=mongodb://<user>:<password>@db/<db_name>
 ```
 
 ```bash
 # To stop the containers run this command
 docker compose -f docker-compose.prod.yml down
+# With volumes
+docker compose -f docker-compose.prod.yml down -v
 ```
 
 ---

@@ -11,4 +11,5 @@ services:
     command: mongod --auth
     volumes:
       - ./mongo:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     container_name: mongo
