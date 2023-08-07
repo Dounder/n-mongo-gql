@@ -29,11 +29,24 @@ import { SeedModule } from './seed/seed.module';
         playground: false,
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         plugins: [ApolloServerPluginLandingPageLocalDefault],
+        path: 'api/v1/graphql',
         context: ({ req }) => {
           const token = req.headers.authorization?.replace(/[Bb]earer\s?/g, '');
           if (!token) throw Error('Token needed');
           const payload = jwtService.decode(token);
           if (!payload) throw Error('Token not valid');
+        },
+        formatError: (error: any) => {
+          const { message, locations, path } = error;
+          const formattedError = {
+            message,
+            locations,
+            path,
+            code: error.extensions?.exception?.response?.code || 'INTERNAL_SERVER_ERROR',
+            response: error.extensions?.exception?.response,
+            timestamp: new Date().toISOString(),
+          };
+          return formattedError;
         },
       }),
     }),
